@@ -22,7 +22,8 @@
 		"recovery-image"
 	],
 	"scripts": {
-		"start": "node ./index.js"
+		"start": "node ./index.js",
+		"update": "node ./update/edgedl.js"
 	},
 	"license": "GPL-3.0",
 	"main": "index.js",

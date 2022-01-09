@@ -12,7 +12,7 @@ async function main(){
 	for(let [ release, version ] of Object.entries(consts.versions))consts.versions[release] = [].concat(version);
 	
 	for(let entry of data){
-		const release = entry.chrome_version;
+		const release = ~~entry.chrome_version.split('.')[0];
 		
 		let [ match, version, board, firmware ] = entry.url.match(/chromeos_([\d.]+)_(\w+)_recovery_stable-channel_mp(?:-v(\d+))?\.bin\.zip$/) || [];
 		
@@ -32,6 +32,8 @@ async function main(){
 			consts.versions[release].push(version);
 		}else consts.versions[release] = [ version ];
 	}
+
+	consts.keys = consts.keys.sort((a,b)=>a-b);
 
 	await fs.promises.writeFile(path.join(__dirname, '..', 'consts.json'), JSON.stringify(consts, null, '\t'));
 }

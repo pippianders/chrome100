@@ -143,7 +143,7 @@ This will update consts.js, using data from https://dl.google.com/dl/edgedl/chro
 
 1. CD into this repository
 2. Install modules: `npm install`
-3. Run the sync script: `npm run start`
+3. Run the sync script: `npm run update`
 
 ### Chromium Dash
 
