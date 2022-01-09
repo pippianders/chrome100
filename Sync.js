@@ -2,12 +2,14 @@
 
 var https = require('https'),
 	fetch = require('node-fetch'),
-	{ keys, boards, versions } = require('./consts.json');
+	{ keys, boards, versions: chrome_versions } = require('./consts.json');
 
 class Sync {
+	sort_by_hits = keys;
+	key_hits = {};
 	constructor(data){
 		this.data = data;
-		this.keepalive = new https.Agent({ keepAlive: true });
+		this.agent = new https.Agent({ maxSockets: 100, keepAlive: true });
 	}
 	url(board, code, key){
 		return 'https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_' + code + '_' + board + '_recovery_stable-channel_mp' + (key ? '-v' + key : '') + '.bin.zip';
@@ -15,12 +17,10 @@ class Sync {
 	async run(){
 		await this.data.store;
 		
-		// reuse keys
-		let sort_by_hits = keys,
-			key_hits = {};
-		
 		for(let board of boards){
-			for(let [ release, version ] of Object.entries(versions)){
+			const version_promises = [];
+			
+			for(let [ release, versions ] of Object.entries(chrome_versions)){
 				if(!this.data.store[board])this.data.store[board] = {
 					processed: {},
 					releases: {},
@@ -28,44 +28,65 @@ class Sync {
 				
 				let sboard = this.data.store[board];
 				
-				for(let code of [].concat(version)){
+				// run all versions concurrently
+				for(let code of versions){
 					if(!sboard.processed[code])sboard.processed[code] = [];
 					
-					for(let key of sort_by_hits){
+					const key_promises = [];
+					
+					for(let key of this.sort_by_hits){
 						if(sboard.processed[code].includes(key))continue;
 						
-						let url = this.url(board, code, key);
+						const url = this.url(board, code, key);
 						
-						let res;
-						
-						try{
-							res = await fetch(url, {
-								method: 'HEAD',
-								agent: this.keepalive,
-							});
-						}catch(err){
-							console.error(err);
+						key_promises.push((async () => {
+							try{
+								// console.time(url);
+								
+								const res = await fetch(url, {
+									method: 'HEAD',
+									agent: this.agent,
+								});
+								
+								// console.timeEnd(url);
+								
+								if(res.ok){
+									console.log('Found DL:', board, release, url);
+									
+									this.key_hits[key] = (this.key_hits[key] || 0) + 1;
+									sboard.releases[release] = { key, code };
+									this.sort_by_hits = keys.sort((key1, key2) => (this.key_hits[key2] || 1) - (this.key_hits[key1] || 1));
+									this.data.change();
+								}else{
+									if(res.status != 404)console.error('Encountered', res.status);
+								}
+							}catch(err){
+								console.error(err);
+								
+								sboard.processed[code].push(key);
+								this.data.change();
+								
+								return;
+							}
 							
 							sboard.processed[code].push(key);
 							this.data.change();
-							
-							return;
-						}
-						
-						if(res.status == 200){
-							console.log('Found DL:', board, release, url);
-							
-							key_hits[key] = (key_hits[key] || 0) + 1;
-							sboard.releases[release] = { key, code };
-							sort_by_hits = keys.sort((key1, key2) => (key_hits[key2] || 1) - (key_hits[key1] || 1));
-							this.data.change();
-						}
-						
-						sboard.processed[code].push(key);
-						this.data.change();
+						})());
+					}
+					
+					if(!key_promises.length)continue;
+					version_promises.push(key_promises);
+					if(version_promises.length >= 20){ // ~30(keys) * x; x=8 MAX 120 REQUESTS CONCURRENT
+						const x = `run batch of ${version_promises.length} promises, in batches: ${version_promises.map(p=>p.length)}`;
+						console.time(x);
+						await Promise.all(version_promises.flat());
+						version_promises.length = 0;
+						console.timeEnd(x);
 					}
 				}
 			}
+			
+			await Promise.all(version_promises);
 		}
 	}
 }
