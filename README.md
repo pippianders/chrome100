@@ -2,7 +2,7 @@
 
 ## Collection of ChromeOS recovery images.
 
-Brought to you by SystemYA
+Brought to you by SystemYA.
 
 - [Why use recovery images?](#why-use-recovery-images)
 	* [Upgrading](#upgrading)
