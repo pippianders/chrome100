@@ -125,10 +125,49 @@ Scraping all valid combinations of board, firmware, and ChromeOS release allows 
 
 A bulk list of ChromeOS version ids scraped from all over the web along with all firmware versions and can be found in the [consts file](consts.js).
 
-A recent scraper is found in this repo in the form of a [Tampermonkey](https://www.tampermonkey.net/) userscript.
+dl.google.com link structure:
 
-### URL example:
+> https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_CHROMEOS.VERSION.ID_CODENAME_recovery_stable-channel_mp-vFIRMWARE-VERSION.bin.zip
 
-```
-https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_CHROMEOS.VERSION.ID_CODENAME_recovery_stable-channel_mp-vFIRMWARE-VERSION.bin.zip
-```
+## Hosting
+
+This will start a webserver listening on http://127.0.0.1:7100/
+
+1. CD into this repository
+2. Install modules: `npm install`
+3. Run the script: `npm run start`
+
+## Updating
+
+This will update consts.js, using data from https://dl.google.com/dl/edgedl/chromeos/recovery/recovery.json
+
+1. CD into this repository
+2. Install modules: `npm install`
+3. Run the sync script: `npm run start`
+
+### Chromium Dash
+
+Google released Chromium Dash, a version tracker for Chrome releases. Unforunately, none of the data includes ChromeOS platform versions. 
+
+> Note: The content of this website will be moving to chromiumdash.appspot.com. This platform will be deprecated towards the beginning of Q1, 2022
+
+https://cros-updates-serving.appspot.com/
+
+Efforts will be made to preserve the contents of cros-updates-serving on Wayback Machine.
+
+https://web.archive.org/web/https://cros-updates-serving.appspot.com/
+
+### Blog searching
+
+The Chrome Releases Blog is highly indexed on Google, allowing data to be extracted. There are many articles, stretching all the way back to the first ChromeOS release.
+
+The last 67 posts about ChromeOS: (Will be used in scraper)
+> https://chromereleases.googleblog.com/search/label/Chrome%20OS?max-results=700
+
+Search on Google for:
+> site:chromereleases.googleblog.com "chrome os" "stable channel" "updated to"
+
+This URL query at the end of the blog URL may show earlier results.
+> &reverse-paginate=true
+
+TODO: Release userscript for scraping https://chromereleases.googleblog.com/search/label/Chrome%20OS?max-results=67

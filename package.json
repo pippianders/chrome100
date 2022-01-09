@@ -21,6 +21,9 @@
 		"chrome-os",
 		"recovery-image"
 	],
+	"scripts": {
+		"start": "node ./index.js"
+	},
 	"license": "GPL-3.0",
 	"main": "index.js",
 	"dependencies": {

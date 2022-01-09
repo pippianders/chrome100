@@ -2,7 +2,7 @@
 
 var https = require('https'),
 	fetch = require('node-fetch'),
-	{ keys, boards, versions } = require('./consts');
+	{ keys, boards, versions } = require('./consts.json');
 
 class Sync {
 	constructor(data){
