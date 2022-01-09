@@ -1,16 +1,39 @@
 {
+	"name": "Chrome100",
+	"version": "1.0.0",
+	"homepage": "https://chrome100.dev/",
+	"bugs": {
+		"url": "https://github.com/sysce/chrome100/issues",
+		"email": "chrome100@sys32.dev"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sysce/chrome100.git"
+	},
+	"author": {
+		"name": "SystemYA Backend",
+		"email": "backend@sys32.dev",
+		"url": "https://sys32.dev/"
+	},
+	"keywords": [
+		"upgrade",
+		"recovery-image",
+		"chrome-os",
+		"recovery-image"
+	],
+	"license": "GPL-3.0",
+	"main": "index.js",
 	"dependencies": {
 		"anchor-js": "^4.3.1",
-		"css-loader": "^5.2.6",
-		"fastify": "^3.18.1",
-		"fastify-static": "^4.2.2",
-		"html-webpack-plugin": "^5.3.2",
-		"marked": "^2.1.3",
-		"mini-css-extract-plugin": "^2.1.0",
-		"node-fetch": "^2.6.1",
-		"prismjs": "^1.24.1",
-		"style-loader": "^3.0.0",
-		"webpack": "^5.43.0"
-	},
-	"main": "index.js"
+		"css-loader": "^6.5.1",
+		"fastify": "^3.25.3",
+		"fastify-static": "^4.5.0",
+		"html-webpack-plugin": "^5.5.0",
+		"marked": "^4.0.9",
+		"mini-css-extract-plugin": "^2.4.6",
+		"node-fetch": "^2.6.6",
+		"prismjs": "^1.26.0",
+		"style-loader": "^3.3.1",
+		"webpack": "^5.65.0"
+	}
 }

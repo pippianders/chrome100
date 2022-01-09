@@ -27,7 +27,7 @@ class Compiler {
 		this.data = data;
 	}
 	markdown(code){
-		return `<div class='markdown-body'>${marked(code.toString().replace(this.public_folder, '').replace(this.remove, ''))}</div>`;
+		return `<div class='markdown-body'>${marked.parse(code.toString().replace(this.public_folder, '').replace(this.remove, ''))}</div>`;
 	}
 	init(){
 		this.webpack = webpack({
