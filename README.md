@@ -74,7 +74,7 @@ To find your board name visit the website `chrome://version` and find the line l
 
 ### Restoring ChromeOS from a USB drive
 
-1. Press `esc` + `refresh` + `power` to enter the recovery menu.
+1. Press <kbd>esc</kbd> + <kbd>refresh</kbd> + <kbd>power</kbd> to enter the recovery menu.
 
 2. Plug in your USB drive you previously burnt a recovery image to.
 
