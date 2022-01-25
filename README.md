@@ -2,7 +2,9 @@
 
 ## Collection of ChromeOS recovery images.
 
-Brought to you by SystemYA.
+Brought to you by [SystemYA](https://github.com/sysce)
+
+[Source code](https://github.com/sysce/chrome100)
 
 - [Why use recovery images?](#why-use-recovery-images)
 	* [Upgrading](#upgrading)
