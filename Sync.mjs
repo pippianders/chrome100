@@ -1,5 +1,3 @@
-'use strict';
-
 import fetch from 'node-fetch';
 import { Agent } from 'node:https';
 import { readConsts } from './consts.mjs';

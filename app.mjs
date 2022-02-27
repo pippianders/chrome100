@@ -1,5 +1,3 @@
-'use strict';
-
 import { Command, Option } from 'commander';
 
 const program = new Command();

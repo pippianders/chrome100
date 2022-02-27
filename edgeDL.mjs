@@ -1,5 +1,3 @@
-'use strict';
-
 import fetch from 'node-fetch';
 import { readConsts, writeConsts } from './consts.mjs';
 

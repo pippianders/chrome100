@@ -1,5 +1,3 @@
-'use strict';
-
 import { readFile, writeFile } from 'node:fs/promises';
 
 export default class DataStore {
