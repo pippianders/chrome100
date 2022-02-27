@@ -2,24 +2,17 @@
 
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readConsts } from './consts.mjs';
+
+const consts = await readConsts();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-import prism from 'prismjs';
 import webpack from 'webpack';
-import prism_load from 'prismjs/components/index.js';
 import { marked } from 'marked';
 import ExtractCSS from 'mini-css-extract-plugin';
 import HTML from 'html-webpack-plugin';
-
-prism_load([ 'json' ]);
-
-marked.setOptions({
-	highlight(code, lang){
-		return prism.languages[lang] ? prism.highlight(code, prism.languages[lang], lang) : code;
-	},
-});
 
 export default class Compiler {
 	assets = join(__dirname, 'assets');
@@ -95,31 +88,35 @@ export default class Compiler {
 		return ' ' + str + ' ';
 	}
 	recovery_table(){
-		var cats = [ 'Board', 'Models', 'Releases' ],
+		var cats = [ 'Board', 'Releases', 'Models' ],
 			extend = [];
 		
 		extend.push(`|${cats.map(this.padding).join('|')}|`);
 		extend.push(`|${cats.map(x => ' ---- ').join('|')}|`);
 		
-		for(let [ board, { releases } ] of Object.entries(this.data.store)){
-			let data = [ board, 'N/A' ];
+		for(let board in this.data.store){
+			const { releases } = this.data.store[board];
+
+			const data = [];
 			
-			let links = [];
+			data.push(board);
+
+			const links = [];
 			
 			for(let [ release, { key, code } ] of Object.entries(releases)){
 				links.push(`[${release}](/download?board=${board}&release=${release})`);
 			}
 			
 			// break list of versions every ${split} values
-			
-			let out = '',
-				split = 5;
+			const split = 5;
 			
 			for(let index = 0; index < links.length; index += split){
 				links.splice(index++ + split, 0, '<br>');
 			}
 			
 			data.push(links.join(' '));
+			
+			data.push(consts.boards[board].join(', '));
 			
 			extend.push(`|${data.map(this.padding).join('|')}|`);
 		}

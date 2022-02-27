@@ -19,16 +19,18 @@ export default class Sync {
 	async run(){
 		await this.data.store;
 		
-		for(let board of consts.boards){
+		for(let board in consts.boards){
 			const version_promises = [];
 			
 			for(let release in consts.versions){
 				const versions = consts.versions[release];
 				
-				if(!this.data.store[board])this.data.store[board] = {
-					processed: {},
-					releases: {},
-				};
+				if(!(board in this.data.store)){
+					this.data.store[board] = {
+						processed: {},
+						releases: {},
+					};
+				}
 				
 				let sboard = this.data.store[board];
 				

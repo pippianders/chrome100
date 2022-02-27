@@ -1,3 +1,8 @@
 .markdown-body {
 	margin: 20px;
 }
+
+/* give releases some width */
+tr > td:nth-child(2) {
+	min-width: 140px;
+}

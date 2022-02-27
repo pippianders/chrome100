@@ -7,7 +7,7 @@ const consts = await readConsts();
 const recovery = await fetch('https://dl.google.com/dl/edgedl/chromeos/recovery/recovery.json');
 const data = await recovery.json();
 
-for(let { chrome_version, version, file } of data){
+for(let { chrome_version, version, file, model } of data){
 	const release = chrome_version.slice(0, chrome_version.indexOf('.'));
 	const match = file.match(/_(\w+)_recovery_stable-channel_mp(?:-v(\d+))?\.bin$/);
 	
@@ -25,18 +25,22 @@ for(let { chrome_version, version, file } of data){
 		}
 	}
 	
-	if(!consts.boards.includes(board)){
-		consts.boards.push(board);
+	if(!(board in consts.boards)){
+		consts.boards[board] = [];
 	}
 
-	if(release in consts.versions){
-		if(consts.versions[release].includes(version)){
-			continue;
-		}
-		
+	if(model !== 'N/A'){
+		if(!consts.boards[board].includes(model)){
+			consts.boards[board].push(model);
+		}	
+	}
+	
+	if(!(release in consts.versions)){
+		consts.versions[release] = [];
+	}
+
+	if(!consts.versions[release].includes(version)){
 		consts.versions[release].push(version);
-	}else{
-		consts.versions[release] = [ version ];
 	}
 }
 
