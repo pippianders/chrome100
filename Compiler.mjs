@@ -107,15 +107,8 @@ export default class Compiler {
 				links.push(`[${release}](/download?board=${board}&release=${release})`);
 			}
 			
-			// break list of versions every ${split} values
-			const split = 5;
-			
-			for(let index = 0; index < links.length; index += split){
-				links.splice(index++ + split, 0, '<br>');
-			}
-			
 			data.push(links.join(' '));
-			
+
 			data.push(consts.boards[board].join(', '));
 			
 			extend.push(`|${data.map(this.padding).join('|')}|`);
