@@ -5,7 +5,7 @@
 Brought to you by [SystemYA](https://github.com/sysce)
 
 - [Source code](https://github.com/sysce/chrome100)
-- [Wiki](https://github.com/sysce/chrome100/wiki) (deployment, using server scripts)
+- [Wiki](https://github.com/sysce/chrome100/wiki) (Deployment, API)
 
 - [Why use recovery images?](#why-use-recovery-images)
 	* [Upgrading](#upgrading)
@@ -15,11 +15,6 @@ Brought to you by [SystemYA](https://github.com/sysce)
 	* [Finding the right recovery image](#finding-the-right-recovery-image)
 	* [Burning the `.zip` file to a USB](#burning-the-zip-file-to-a-usb)
 	* [Restoring ChromeOS from a USB drive](#restoring-chromeos-from-a-usb-drive)
-- [Source](https://github.com/sysce/chrome100)
-	* [Issues/support](https://github.com/sysce/chrome100/issues)
-- [API](#api)
-	* [Request recovery image](#request-recovery-image)
-	* [List of boards and versions](#list-of-boards-and-versions)
 - [Explanation](#explanation)
 
 <!-- REMOVE -->
@@ -84,38 +79,3 @@ To find your board name visit the website `chrome://version` and find the line l
 3. Press enter once the menu is done verifying your USB drive.
 
 4. Once finished, unplug your USB drive.
-
-## API
-
-### Request recovery image
-
-| Method | Endpoint  |
-| - | - |
-| `GET` | [https://chrome100.dev/download](/download) |
-
-Search query:
-
-| Parameter | Type     | Description                                     |
-| --------- | -------- | ----------------------------------------------- |
-| Board     | `String`   | The board the recovery image will be used on  |
-| Release   | `Integer`  | The version of Chrome in the recovery image   |
-
-Response: 
-
-302 Redirect to the requested recovery image `.zip` file
-
-### List of boards and versions
-
-Returns a JSON object containing pairs of board names and arrays of chrome versions the board is compatible with. 
-
-| Method | Endpoint |
-| - | - |
-| `GET` | [https://chrome100.dev/data](/data) |
-
-Response:
-
-```json
-{
-	"reks": ["48","51","52","53","56","57","58","59","60","61","62","65","66","68","69","70","71","72","73","74","75","76","78","79","80","81","83","84","85","86","87","88","89","90","91"],
-}
-```
