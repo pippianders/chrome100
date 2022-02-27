@@ -2,7 +2,12 @@
 	margin: 20px;
 }
 
-/* give releases some width */
+/* board */
+tr > td:nth-child(1) {
+	width: 110px;
+}
+
+/* releases */
 tr > td:nth-child(2) {
 	width: 140px;
 }
