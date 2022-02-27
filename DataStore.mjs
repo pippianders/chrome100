@@ -1,8 +1,8 @@
 'use strict';
 
-var fs = require('fs');
+import { readFile, writeFile } from 'node:fs/promises';
 
-class DataStore {
+export default class DataStore {
 	constructor(file, base = {}){
 		this.file = file;
 		// base data if the specified file cannot be loaded
@@ -25,7 +25,7 @@ class DataStore {
 		if(this.closed)throw new Error('DataStore is closed.');
 		
 		try{
-			return JSON.parse(await fs.promises.readFile(this.file));
+			return JSON.parse(await readFile(this.file));
 		}catch(err){
 			return this.base;
 		}
@@ -34,7 +34,7 @@ class DataStore {
 		if(this.closed)throw new Error('DataStore is closed.');
 		
 		if(!this.changed)return;
-		await fs.promises.writeFile(this.file, JSON.stringify(this.store));
+		await writeFile(this.file, JSON.stringify(this.store));
 		this.changed = false;
 	}
 	setTimeout(callback, time){
@@ -55,6 +55,4 @@ class DataStore {
 		for(let timeout of this.timeouts)clearTimeout(timeout);
 		for(let interval of this.intervals)clearInterval(interval);
 	}
-}
-
-module.exports = DataStore;
+};

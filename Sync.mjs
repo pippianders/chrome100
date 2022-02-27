@@ -1,15 +1,17 @@
 'use strict';
 
-var https = require('https'),
-	fetch = require('node-fetch'),
-	{ keys, boards, versions: chrome_versions } = require('./consts.json');
+import fetch from 'node-fetch';
+import { Agent } from 'node:https';
+import { readConsts } from './consts.mjs';
 
-class Sync {
-	sort_by_hits = keys;
+const consts = await readConsts();
+
+export default class Sync {
+	sort_by_hits = consts.keys;
 	key_hits = {};
 	constructor(data){
 		this.data = data;
-		this.agent = new https.Agent({ maxSockets: 100, keepAlive: true });
+		this.agent = new Agent({ maxSockets: 100, keepAlive: true });
 	}
 	url(board, code, key){
 		return 'https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_' + code + '_' + board + '_recovery_stable-channel_mp' + (key ? '-v' + key : '') + '.bin.zip';
@@ -17,10 +19,12 @@ class Sync {
 	async run(){
 		await this.data.store;
 		
-		for(let board of boards){
+		for(let board of consts.boards){
 			const version_promises = [];
 			
-			for(let [ release, versions ] of Object.entries(chrome_versions)){
+			for(let release in consts.versions){
+				const versions = consts.versions[release];
+				
 				if(!this.data.store[board])this.data.store[board] = {
 					processed: {},
 					releases: {},
@@ -89,6 +93,4 @@ class Sync {
 			await Promise.all(version_promises);
 		}
 	}
-}
-
-module.exports = Sync;
+};

@@ -1,16 +1,38 @@
 'use strict';
 
-var path = require('path'),
-	https = require('https'),
-	fastify = require('fastify'),
-	Compiler = require('./Compiler'),
-	DataStore = require('./DataStore'),
-	Sync = require('./Sync'),
-	data = new DataStore(path.join(__dirname, 'data.json')),
-	sync = new Sync(data),
-	compiler = new Compiler(data),
-	sync_operation = sync.run(),
-	server = fastify({ logger: false });
+import { Command, Option } from 'commander';
+
+const program = new Command();
+
+program
+.addOption(new Option('--h, --host <string>', 'Listening host').default('localhost'))
+.addOption(new Option('--p, --port <number>', 'Listening port').default(80).env('PORT'))
+;
+
+program.parse(process.argv);
+
+const options = program.opts();
+
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import Sync from './Sync.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const data = new DataStore(join(__dirname, 'data.json'));
+const sync = new Sync(data);
+
+import Compiler from './Compiler.mjs';
+import DataStore from './DataStore.mjs';
+
+const compiler = new Compiler(data);
+const sync_operation = sync.run();
+
+import Fastify, { fastify } from 'fastify';
+import fastifyStatic from 'fastify-static';
+
+const server = new Fastify({ logger: false });
 
 console.log('Syncing...');
 
@@ -59,10 +81,13 @@ server.route({
 	},
 });
 
-server.listen(7100, err => {
-	if(err)throw err;
-	
-	console.log('listening on http://127.0.0.1:7100');
-});
+server.register(fastifyStatic, { root: compiler.web });
 
-server.register(require('fastify-static'), { root: compiler.web });
+server.listen(options.port, options.host, (error, url) => {
+	if(error){
+		console.error(error);
+		process.exit(1);
+	}
+	
+	console.log('Server listening. View live at', url);
+});

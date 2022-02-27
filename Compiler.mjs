@@ -1,15 +1,19 @@
 'use strict';
 
-var fs = require('fs'),
-	path = require('path'),
-	prism = require('prismjs'),
-	webpack = require('webpack'),
-	prism_load = require('prismjs/components/'),
-	marked = require('marked'),
-	ExtractCSS = require('mini-css-extract-plugin'),
-	HTML = require('html-webpack-plugin');
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-prism_load([ 'javascript', 'markup', 'css', 'json' ]);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+import prism from 'prismjs';
+import webpack from 'webpack';
+import prism_load from 'prismjs/components/index.js';
+import { marked } from 'marked';
+import ExtractCSS from 'mini-css-extract-plugin';
+import HTML from 'html-webpack-plugin';
+
+prism_load([ 'json' ]);
 
 marked.setOptions({
 	highlight(code, lang){
@@ -17,10 +21,10 @@ marked.setOptions({
 	},
 });
 
-class Compiler {
-	assets = path.join(__dirname, 'assets');
-	web = path.join(__dirname, 'public');
-	md = path.join(this.assets, 'index.md');
+export default class Compiler {
+	assets = join(__dirname, 'assets');
+	web = join(__dirname, 'public');
+	md = join(this.assets, 'index.md');
 	remove = /(<!-- REMOVE -->)[\s\S]*?\1/g;
 	public_folder = /public\//g;
 	constructor(data){
@@ -31,7 +35,7 @@ class Compiler {
 	}
 	init(){
 		this.webpack = webpack({
-			entry: path.join(this.assets, 'index.js'),
+			entry: join(this.assets, 'entry.mjs'),
 			context: __dirname,
 			output: {
 				path: this.web,
@@ -39,10 +43,9 @@ class Compiler {
 			},
 			plugins: [
 				new HTML({
-					template: path.join(this.assets, 'index.ejs'),
+					template: join(this.assets, 'index.ejs'),
 					templateParameters: {
 						compiler: this,
-						fs,
 					},
 				}),
 				new ExtractCSS()
@@ -72,13 +75,11 @@ class Compiler {
 					},
 				],
 			},
-		}, (err, stats) => {
-			if(this.errors(err, stats))return console.error('Compiler failure');
-			
-			this.webpack.watch({}, async (err, stats) => {
-				if(this.errors(err, stats))return console.error('Build failure');
-				else console.log('Build success');
-			});
+		});
+		
+		this.webpack.watch({}, async (err, stats) => {
+			if(this.errors(err, stats))return console.error('Build failure');
+			else console.log('Build success');
 		});
 	}
 	errors(err, stats = { compilation: { errors: [] } }){
@@ -126,5 +127,3 @@ class Compiler {
 		return extend.join('\n');
 	}
 };
-
-module.exports = Compiler;
