@@ -23,8 +23,7 @@
 	],
 	"scripts": {
 		"server": "node ./server.mjs",
-		"update": "node ./edgeDL.mjs",
-		"install": "npm install"
+		"update": "node ./edgeDL.mjs"
 	},
 	"license": "GPL-3.0",
 	"type": "module",
