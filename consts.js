@@ -1,4 +1,3 @@
-
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { readFile, writeFile } from 'node:fs/promises';

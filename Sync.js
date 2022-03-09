@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { Agent } from 'node:https';
-import { readConsts } from './consts.mjs';
+import { readConsts } from './consts.js';
 
 const consts = await readConsts();
 

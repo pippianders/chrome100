@@ -22,8 +22,8 @@
 		"recovery-image"
 	],
 	"scripts": {
-		"server": "node ./app.mjs",
-		"update": "node ./edgeDL.mjs"
+		"server": "node ./app.js",
+		"update": "node ./edgeDL.js"
 	},
 	"license": "GPL-3.0",
 	"type": "module",

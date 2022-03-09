@@ -1,6 +1,6 @@
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readConsts } from './consts.mjs';
+import { readConsts } from './consts.js';
 
 const consts = await readConsts();
 

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { readConsts, writeConsts } from './consts.mjs';
+import { readConsts, writeConsts } from './consts.js';
 
 const consts = await readConsts();
 const recovery = await fetch('https://dl.google.com/dl/edgedl/chromeos/recovery/recovery.json');
