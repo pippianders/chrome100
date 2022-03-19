@@ -18,13 +18,12 @@ export default class Compiler {
 	md = join(this.assets, 'index.md');
 	remove = /(<!-- REMOVE -->)[\s\S]*?\1/g;
 	public_folder = /public\//g;
-	constructor(data){
-		this.data = data;
-	}
 	markdown(code){
 		return `<div class='markdown-body'>${marked.parse(code.toString().replace(this.public_folder, '').replace(this.remove, ''))}</div>`;
 	}
-	init(){
+	constructor(data){
+		this.data = data;
+
 		this.webpack = webpack({
 			entry: join(this.assets, 'entry.mjs'),
 			context: __dirname,

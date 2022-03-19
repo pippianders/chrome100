@@ -515,7 +515,10 @@
 			"Lenovo 500e Chromebook Gen 3",
 			"Lenovo Flex 3i-11 Chromebook / IdeaPad Flex 3i Chromebook (11\", 6)",
 			"NEC Chromebook Y3",
-			"Zyrex Chromebook M432-2"
+			"Zyrex Chromebook M432-2",
+			"Acer Chromebook 512 (C852)",
+			"Galaxy Chromebook 2 360",
+			"Lenovo Flex 3i Chromebook 15”/IdeaPad Flex 3i Chromebook (15\", 7)"
 		],
 		"drallion": [
 			"Dell Latitude 7410 Chromebook Enterprise"
@@ -570,7 +573,8 @@
 			"HP Pro c640 G2 Chromebook",
 			"IdeaPad Flex 5i Chromebook (13\", 6)",
 			"Lenovo 5i-14 Chromebook",
-			"Lenovo Slim 5 Chromebook"
+			"Lenovo Slim 5 Chromebook",
+			"ASUS Chromebook Flip CX5 (CX5500), ASUS Chromebook Flip C536"
 		],
 		"strongbad": [
 			"HP Chromebook x2 11c",
@@ -737,7 +741,8 @@
 		],
 		"98": [
 			"14388.61.0",
-			"14388.52.0"
+			"14388.52.0",
+			"14388.62.0"
 		]
 	}
 }

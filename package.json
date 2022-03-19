@@ -21,10 +21,6 @@
 		"chrome-os",
 		"recovery-image"
 	],
-	"scripts": {
-		"server": "node ./app.js",
-		"update": "node ./edgeDL.js"
-	},
 	"license": "GPL-3.0",
 	"type": "module",
 	"dependencies": {

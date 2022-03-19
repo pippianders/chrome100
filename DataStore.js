@@ -32,7 +32,7 @@ export default class DataStore {
 		if(this.closed)throw new Error('DataStore is closed.');
 		
 		if(!this.changed)return;
-		await writeFile(this.file, JSON.stringify(this.store));
+		// await writeFile(this.file, JSON.stringify(this.store));
 		this.changed = false;
 	}
 	setTimeout(callback, time){

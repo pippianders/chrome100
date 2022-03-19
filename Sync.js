@@ -1,8 +1,11 @@
 import fetch from 'node-fetch';
 import { Agent } from 'node:https';
+import { TLSSocket } from 'node:tls';
 import { readConsts } from './consts.js';
 
 const consts = await readConsts();
+
+TLSSocket.setMaxListeners(1000);
 
 export default class Sync {
 	sort_by_hits = consts.keys;
@@ -19,7 +22,7 @@ export default class Sync {
 		
 		for(let board in consts.boards){
 			const version_promises = [];
-			
+
 			for(let release in consts.versions){
 				const versions = consts.versions[release];
 				
@@ -34,8 +37,10 @@ export default class Sync {
 				
 				// run all versions concurrently
 				for(let code of versions){
-					if(!sboard.processed[code])sboard.processed[code] = [];
-					
+					if(!sboard.processed[code]){
+						sboard.processed[code] = [];
+					}
+
 					const key_promises = [];
 					
 					for(let key of this.sort_by_hits){
@@ -59,7 +64,7 @@ export default class Sync {
 									
 									this.key_hits[key] = (this.key_hits[key] || 0) + 1;
 									sboard.releases[release] = { key, code };
-									this.sort_by_hits = keys.sort((key1, key2) => (this.key_hits[key2] || 1) - (this.key_hits[key1] || 1));
+									this.sort_by_hits = consts.keys.sort((key1, key2) => (this.key_hits[key2] || 1) - (this.key_hits[key1] || 1));
 									this.data.change();
 								}else{
 									if(res.status != 404)console.error('Encountered', res.status);
@@ -78,19 +83,24 @@ export default class Sync {
 						})());
 					}
 					
-					if(!key_promises.length)continue;
+					if(!key_promises.length){
+						continue;
+					}
+
 					version_promises.push(key_promises);
-					if(version_promises.length >= 20){ // ~30(keys) * x; x=8 MAX 120 REQUESTS CONCURRENT
-						const x = `run batch of ${version_promises.length} promises, in batches: ${version_promises.map(p=>p.length)}`;
+					
+					if(version_promises.length > 20){
+						const x = `run batch of ${version_promises.length} promises, in batches: ${version_promises.flat(2).length}`;
 						console.time(x);
-						await Promise.all(version_promises.flat());
+						console.log(version_promises);
+						await Promise.all(version_promises.flat(1));
 						version_promises.length = 0;
 						console.timeEnd(x);
 					}
 				}
 			}
 			
-			await Promise.all(version_promises);
+			await Promise.all(version_promises.flat(1));
 		}
 	}
 };
