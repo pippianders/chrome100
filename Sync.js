@@ -123,6 +123,7 @@ export default class Sync {
 			await Promise.all(version_promises.flat(1));
 		}
 
-		this.data.save();
+		await this.data.save();
+		await this.data.close();
 	}
 }
