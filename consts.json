@@ -441,7 +441,10 @@
 			"WS Chromebook A101",
 			"XO Chromebook",
 			"Zyrex Chromebook 360",
-			"Zyrex Chromebook M432-1"
+			"Zyrex Chromebook M432-1",
+			"Positivo Chromebook N2210",
+			"Positivo Chromebook N2212",
+			"Zyrex Chromebook M432-1/M432-128/Zyrex Chromebook 360-1"
 		],
 		"liara": [],
 		"rammus": [
@@ -518,7 +521,11 @@
 			"Zyrex Chromebook M432-2",
 			"Acer Chromebook 512 (C852)",
 			"Galaxy Chromebook 2 360",
-			"Lenovo Flex 3i Chromebook 15”/IdeaPad Flex 3i Chromebook (15\", 7)"
+			"Lenovo Flex 3i Chromebook 15”/IdeaPad Flex 3i Chromebook (15\", 7)",
+			"100e Chromebook Gen 3",
+			"CX1400FKA",
+			"Lenovo Flex 3i Chromebook 15 IdeaPad Flex 3i Chromebook (15, 7)",
+			"SPC Chromebook Z1 Mini"
 		],
 		"drallion": [
 			"Dell Latitude 7410 Chromebook Enterprise"
@@ -540,7 +547,8 @@
 		"trogdor": [
 			"Acer Chromebook 511 (C741L/C741LT)",
 			"Acer Chromebook Spin 513, CP513-1H/1HL, R841T/LT",
-			"Dynabook Chromebook C1"
+			"Dynabook Chromebook C1",
+			"Libera-Merdeka Chromebook C100/C110/C120/C150"
 		],
 		"zork": [
 			"ASUS Chromebook Flip CM1",
@@ -578,7 +586,8 @@
 		],
 		"strongbad": [
 			"HP Chromebook x2 11c",
-			"Lenovo Chromebook Duet 5 / IdeaPad Duet 5 Chromebook"
+			"Lenovo Chromebook Duet 5 / IdeaPad Duet 5 Chromebook",
+			"Lenovo Chromebook Duet 3 / IdeaPad Duet 3 Chromebook"
 		]
 	},
 	"versions": {
@@ -743,6 +752,10 @@
 			"14388.61.0",
 			"14388.52.0",
 			"14388.62.0"
+		],
+		"100": [
+			"14526.89.0",
+			"14526.69.0"
 		]
 	}
 }
