@@ -3,7 +3,7 @@ import { Command, Option } from 'commander';
 const program = new Command();
 
 import DataStore from '../DataStore.js';
-import Fastify from 'fastify';
+import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,62 +21,69 @@ program
 	)
 	.action(({ port, host }) => {
 		const data = new DataStore(join(__dirname, '..', 'data.json'));
-		const server = new Fastify({ logger: false });
+		const server = fastify({ logger: false });
 
-		server.route({
-			url: '/data',
-			method: 'GET',
-			handler(request, reply) {
-				const out = {};
+		server.register(
+			async server => {
+				server.route({
+					url: '/data',
+					method: 'GET',
+					handler(request, reply) {
+						const out = {};
 
-				for (let board in data.store) {
-					const releases = [];
+						for (let board in data.store) {
+							const releases = [];
 
-					for (let release in data.store[board]) {
-						releases.push(release);
-					}
+							for (let release in data.store[board]) {
+								releases.push(release);
+							}
 
-					out[board] = releases;
-				}
+							out[board] = releases;
+						}
 
-				for (let [board, { releases }] of Object.entries(data.store))
-					out[board] = Object.keys(releases);
+						for (let [board, { releases }] of Object.entries(data.store))
+							out[board] = Object.keys(releases);
 
-				reply.send(out);
+						reply.send(out);
+					},
+				});
+
+				server.route({
+					url: '/download',
+					method: 'GET',
+					querystring: {
+						board: { type: 'string' },
+						release: { type: 'integer' },
+					},
+					handler(request, reply) {
+						const { board, release } = request.query;
+
+						const board_store = data.store[board];
+
+						if (!board_store) {
+							throw new RangeError('Unknown board');
+						}
+
+						const meta = board_store.releases[release];
+
+						if (!meta) {
+							throw new RangeError('Unknown release');
+						}
+
+						const { code, key } = meta;
+
+						reply.redirect(
+							`https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_${code}_${board}_recovery_stable-channel_mp${
+								key ? '-v' + key : ''
+							}.bin.zip`
+						);
+					},
+				});
 			},
-		});
-
-		server.route({
-			url: '/download',
-			method: 'GET',
-			querystring: {
-				board: { type: 'string' },
-				release: { type: 'integer' },
-			},
-			handler(request, reply) {
-				const { board, release } = request.query;
-
-				const board_store = data.store[board];
-
-				if (!board_store) {
-					throw new RangeError('Unknown board');
-				}
-
-				const meta = board_store.releases[release];
-
-				if (!meta) {
-					throw new RangeError('Unknown release');
-				}
-
-				const { code, key } = meta;
-
-				reply.redirect(
-					`https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_${code}_${board}_recovery_stable-channel_mp${
-						key ? '-v' + key : ''
-					}.bin.zip`
-				);
-			},
-		});
+			{
+				prefix: '/api',
+			}
+		);
 
 		server.register(fastifyStatic, { root: appBuild });
 

@@ -40,7 +40,9 @@ function recovery_table() {
 		const links = [];
 
 		for (let [release] of Object.entries(releases)) {
-			links.push(`[${release}](/download?board=${board}&release=${release})`);
+			links.push(
+				`[${release}](/api/download?board=${board}&release=${release})`
+			);
 		}
 
 		row.push(links.join(' '));
@@ -93,7 +95,8 @@ const compiler = webpack({
 		],
 	},
 });
-await data.close();
+
+data.close();
 
 compiler.run((error, stats) => {
 	const errors = [error, ...stats.compilation.errors].filter(Boolean);
