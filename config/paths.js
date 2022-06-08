@@ -15,3 +15,5 @@ export const appMd = resolveApp('src/index.md');
 export const appPublic = resolveApp('public');
 export const appBuild = resolveApp('build');
 export const appHtml = resolveApp('public/index.html');
+export const appData = resolveApp('bin/data.json');
+export const appConsts = resolveApp('bin/consts.json');

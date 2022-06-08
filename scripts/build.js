@@ -1,12 +1,8 @@
 import DataStore from '../DataStore.js';
 
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { readConsts } from '../consts.js';
 
 const consts = await readConsts();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 import webpack from 'webpack';
 import { marked } from 'marked';
@@ -15,13 +11,14 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import fs from 'fs-extra';
 import {
 	appBuild,
+	appData,
 	appHtml,
 	appIndexJs,
 	appMd,
 	appPublic,
 } from '../config/paths.js';
 
-const data = new DataStore(join(__dirname, '..', 'data.json'));
+const data = new DataStore(appData);
 
 function recovery_table() {
 	const cats = ['Board', 'Releases', 'Models'];

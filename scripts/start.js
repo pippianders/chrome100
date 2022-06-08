@@ -5,12 +5,7 @@ const program = new Command();
 import DataStore from '../DataStore.js';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { appBuild } from '../config/paths.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { appBuild, appData } from '../config/paths.js';
 
 program
 	.addOption(
@@ -20,7 +15,7 @@ program
 		new Option('--p, --port <number>', 'Listening port').default(80).env('PORT')
 	)
 	.action(({ port, host }) => {
-		const data = new DataStore(join(__dirname, '..', 'data.json'));
+		const data = new DataStore(appData);
 		const server = fastify({ logger: false });
 
 		server.register(
