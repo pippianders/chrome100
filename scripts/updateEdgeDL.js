@@ -12,10 +12,10 @@ console.log('Success. Received', data.length, 'entries');
 
 console.log('Processing data...');
 
-let new_models = [];
-let new_boards = [];
-let new_firmware = [];
-let new_versions = [];
+const new_models = [];
+const new_boards = [];
+const new_firmware = [];
+const new_versions = [];
 
 for (let { chrome_version, version, file, model } of data) {
 	const release = chrome_version.slice(0, chrome_version.indexOf('.'));

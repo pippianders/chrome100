@@ -2,12 +2,12 @@ import { Command, Option } from 'commander';
 
 const program = new Command();
 
-import Compiler from '../Compiler.js';
 import DataStore from '../DataStore.js';
 import Fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { appBuild } from '../config/paths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,8 +21,6 @@ program
 	)
 	.action(({ port, host }) => {
 		const data = new DataStore(join(__dirname, '..', 'data.json'));
-
-		const compiler = new Compiler(data);
 		const server = new Fastify({ logger: false });
 
 		server.route({
@@ -80,7 +78,7 @@ program
 			},
 		});
 
-		server.register(fastifyStatic, { root: compiler.web });
+		server.register(fastifyStatic, { root: appBuild });
 
 		server.listen(port, host, (error, url) => {
 			if (error) {
