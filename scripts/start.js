@@ -28,7 +28,7 @@ program
 				server.route({
 					url: '/data',
 					method: 'GET',
-					handler(request, reply) {
+					handler(_request, reply) {
 						const out = {};
 
 						for (let board in data.store) {
