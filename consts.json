@@ -444,7 +444,8 @@
 			"Zyrex Chromebook M432-1",
 			"Positivo Chromebook N2210",
 			"Positivo Chromebook N2212",
-			"Zyrex Chromebook M432-1/M432-128/Zyrex Chromebook 360-1"
+			"Zyrex Chromebook M432-1/M432-128/Zyrex Chromebook 360-1",
+			"EVERCOSS Chromebook CB1/CB1A"
 		],
 		"liara": [],
 		"rammus": [
@@ -525,7 +526,11 @@
 			"100e Chromebook Gen 3",
 			"CX1400FKA",
 			"Lenovo Flex 3i Chromebook 15 IdeaPad Flex 3i Chromebook (15, 7)",
-			"SPC Chromebook Z1 Mini"
+			"SPC Chromebook Z1 Mini",
+			"CTL Chromebook PX14E/PX14EX",
+			"CX1500FKA",
+			"Gateway Chromebook 14",
+			"Gateway Chromebook 15"
 		],
 		"drallion": [
 			"Dell Latitude 7410 Chromebook Enterprise"
@@ -548,7 +553,8 @@
 			"Acer Chromebook 511 (C741L/C741LT)",
 			"Acer Chromebook Spin 513, CP513-1H/1HL, R841T/LT",
 			"Dynabook Chromebook C1",
-			"Libera-Merdeka Chromebook C100/C110/C120/C150"
+			"Libera-Merdeka Chromebook C100/C110/C120/C150",
+			"Orbic Chromebook"
 		],
 		"zork": [
 			"ASUS Chromebook Flip CM1",
@@ -588,6 +594,9 @@
 			"HP Chromebook x2 11c",
 			"Lenovo Chromebook Duet 5 / IdeaPad Duet 5 Chromebook",
 			"Lenovo Chromebook Duet 3 / IdeaPad Duet 3 Chromebook"
+		],
+		"brya": [
+			"HP Elite Dragonfly Chromebook"
 		]
 	},
 	"versions": {
@@ -756,6 +765,9 @@
 		"100": [
 			"14526.89.0",
 			"14526.69.0"
+		],
+		"101": [
+			"14588.98.0"
 		]
 	}
 }

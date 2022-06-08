@@ -6,13 +6,11 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default async function sync() {
-	const data = new DataStore(join(__dirname, '..', 'data.json'));
-	const sync = new Sync(data);
+const data = new DataStore(join(__dirname, '..', 'data.json'));
+const sync = new Sync(data);
 
-	console.log('Syncing...');
+console.log('Syncing...');
 
-	await sync.run();
+await sync.run();
 
-	console.log('Sync complete');
-}
+console.log('Sync complete');
