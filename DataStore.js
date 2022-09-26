@@ -33,7 +33,7 @@ export default class DataStore {
  * Asynchronously open a DataStore.
  * @param {string} file
  * @param {object} fallback
- * @return {DataStore}
+ * @return {Promise<DataStore>}
  */
 export async function openDataStore(file, fallback = {}) {
   let store = fallback;
