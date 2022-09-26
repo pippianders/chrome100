@@ -13,7 +13,7 @@ const consts = await readConsts();
 
 TLSSocket.setMaxListeners(1000);
 
-const sort_by_hits = consts.keys;
+let sort_by_hits = consts.keys;
 const key_hits = {};
 
 const agent = new Agent({ maxSockets: 100, keepAlive: true });

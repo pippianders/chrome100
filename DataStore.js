@@ -1,32 +1,19 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
 export default class DataStore {
-	constructor(file, base = {}) {
+	constructor(file, store) {
 		this.file = file;
-		// base data if the specified file cannot be loaded
-		this.base = base;
 
 		this.timeouts = new Set();
 		this.intervals = new Set();
 
 		this.setInterval(() => this.save(), 1000);
 
-		this.store = this.load();
-
-		this.store.then(data => (this.store = data));
+		this.store = store;
 	}
 	change() {
 		if (this.closed) throw new Error('DataStore is closed.');
 		this.changed = true;
-	}
-	async load() {
-		if (this.closed) throw new Error('DataStore is closed.');
-
-		try {
-			return JSON.parse(await readFile(this.file));
-		} catch (err) {
-			return this.base;
-		}
 	}
 	async save() {
 		if (this.closed) throw new Error('DataStore is closed.');
@@ -52,4 +39,16 @@ export default class DataStore {
 		for (let timeout of this.timeouts) clearTimeout(timeout);
 		for (let interval of this.intervals) clearInterval(interval);
 	}
+}
+
+export async function openDataStore(file, fallback = {}) {
+	let store = fallback;
+
+	try {
+		store = JSON.parse(await readFile(file));
+	} catch (err) {
+		if (err?.code !== 'ENOENT') throw err;
+	}
+
+	return new DataStore(file, store);
 }

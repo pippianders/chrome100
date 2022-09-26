@@ -1,8 +1,8 @@
-import DataStore from '../DataStore.js';
-import { appBuild, appData } from '../config/paths.js';
+import { openDataStore } from '../DataStore.js';
 import { Command, Option } from 'commander';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
+import { resolve } from 'node:path';
 
 const program = new Command();
 
@@ -13,8 +13,8 @@ program
 	.addOption(
 		new Option('--p, --port <number>', 'Listening port').default(80).env('PORT')
 	)
-	.action(({ port, host }) => {
-		const data = new DataStore(appData);
+	.action(async ({ port, host }) => {
+		const data = await openDataStore('bin/data.json');
 		const server = fastify({ logger: false });
 
 		server.register(
@@ -22,7 +22,7 @@ program
 				server.route({
 					url: '/data',
 					method: 'GET',
-					handler(_request, reply) {
+					handler(request, reply) {
 						const out = {};
 
 						for (let board in data.store) {
@@ -35,7 +35,7 @@ program
 							out[board] = releases;
 						}
 
-						for (let [board, { releases }] of Object.entries(data.store))
+						for (const [board, { releases }] of Object.entries(data.store))
 							out[board] = Object.keys(releases);
 
 						reply.send(out);
@@ -79,7 +79,7 @@ program
 			}
 		);
 
-		server.register(fastifyStatic, { root: appBuild });
+		server.register(fastifyStatic, { root: resolve('build') });
 
 		server.listen(port, host, (error, url) => {
 			if (error) {

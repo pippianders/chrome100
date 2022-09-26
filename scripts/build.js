@@ -1,102 +1,60 @@
-import DataStore from '../DataStore.js';
-import {
-	appBuild,
-	appData,
-	appHtml,
-	appIndexJs,
-	appMd,
-	appPublic,
-} from '../config/paths.js';
+import { openDataStore } from '../DataStore.js';
 import { readConsts } from '../consts.js';
-import fs from 'fs-extra';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { copy } from 'fs-extra';
 import { marked } from 'marked';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import webpack from 'webpack';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 
 const consts = await readConsts();
 
-const data = new DataStore(appData);
+const data = await openDataStore('bin/data.json');
 
-function recovery_table() {
-	const cats = ['Board', 'Releases', 'Models'];
-	const extend = [];
+const cats = ['Board', 'Releases', 'Models'];
+const extend = [];
 
-	extend.push(`|${cats.map(cat => ` ${cat} `).join('|')}|`);
-	extend.push(`|${cats.map(x => ' ---- ').join('|')}|`);
+extend.push(`|${cats.map(cat => ` ${cat} `).join('|')}|`);
+extend.push(`|${cats.map(() => ' ---- ').join('|')}|`);
 
-	for (let board in data.store) {
-		const { releases } = data.store[board];
+for (let board in data.store) {
+	const { releases } = data.store[board];
 
-		const row = [];
+	const row = [];
 
-		row.push(board);
+	row.push(board);
 
-		const links = [];
+	const links = [];
 
-		for (let [release] of Object.entries(releases)) {
-			links.push(
-				`[${release}](/api/download?board=${board}&release=${release})`
-			);
-		}
-
-		row.push(links.join(' '));
-
-		row.push(consts.boards[board].join(', '));
-
-		extend.push(`|${row.map(col => ` ${col} `).join('|')}|`);
+	for (let [release] of Object.entries(releases)) {
+		links.push(`[${release}](/api/download?board=${board}&release=${release})`);
 	}
 
-	return extend.join('\n');
+	row.push(links.join(' '));
+
+	row.push(consts.boards[board].join(', '));
+
+	extend.push(`|${row.map(col => ` ${col} `).join('|')}|`);
 }
-
-await fs.emptyDir(appBuild);
-
-await fs.copy(appPublic, appBuild, {
-	dereference: true,
-	filter: file => file !== appHtml,
-});
-
-const compiler = webpack({
-	entry: appIndexJs,
-	output: {
-		path: appBuild,
-		filename: 'main.js',
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: appHtml,
-			templateParameters: {
-				markdown: marked.parse(
-					(await fs.readFile(appMd, 'utf8')).replace(
-						'RECOVERY_IMAGES',
-						recovery_table()
-					)
-				),
-			},
-		}),
-		new MiniCssExtractPlugin(),
-	],
-	module: {
-		rules: [
-			{
-				test: /\.css$/,
-				use: [MiniCssExtractPlugin.loader, 'css-loader'],
-			},
-			{
-				test: /\.(svg|gif|png|eot|woff|ttf)$/,
-				use: ['url-loader'],
-			},
-		],
-	},
-});
 
 data.close();
 
-compiler.run((error, stats) => {
-	const errors = [error, ...stats.compilation.errors].filter(Boolean);
+const recoveryTable = extend.join('\n');
 
-	for (let error of errors) {
-		console.error(error);
-	}
+await rm('build', { force: true, recursive: true });
+await mkdir('build');
+
+await copy('public', 'build', {
+	dereference: true,
 });
+
+const index = await readFile('build/index.html', 'utf-8');
+
+const markdownBody = marked.parse(
+	(await readFile('assets/instructions.md', 'utf8')).replace(
+		'RECOVERY_IMAGES',
+		recoveryTable
+	)
+);
+
+await writeFile(
+	'build/index.html',
+	index.replace(/<markdown-body\s*?\/>/g, markdownBody)
+);
