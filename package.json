@@ -24,10 +24,10 @@
   "license": "GPL-3.0",
   "type": "module",
   "dependencies": {
+    "@fastify/static": "^6.5.0",
     "anchor-js": "^4.3.1",
     "commander": "^9.4.0",
     "fastify": "^4.6.0",
-    "fastify-static": "^4.7.0",
     "fs-extra": "^10.1.0",
     "marked": "^4.1.0",
     "node-fetch": "^3.2.0"

@@ -1,7 +1,7 @@
 import { openDataStore } from '../DataStore.js';
+import fastifyStatic from '@fastify/static';
 import { Command, Option } from 'commander';
 import fastify from 'fastify';
-import fastifyStatic from 'fastify-static';
 import { resolve } from 'node:path';
 
 const program = new Command();
