@@ -1,11 +1,10 @@
-import DataStore from '../DataStore.js';
-import { appData } from '../config/paths.js';
+import DataStore, { openDataStore } from '../DataStore.js';
 import { readConsts } from '../consts.js';
 import fetch from 'node-fetch';
 import { Agent } from 'node:https';
 import { TLSSocket } from 'node:tls';
 
-const data = new DataStore(appData);
+const data = await openDataStore('bin/data.json');
 
 console.log('Syncing...');
 
