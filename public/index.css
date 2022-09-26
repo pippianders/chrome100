@@ -1,13 +1,13 @@
 .markdown-body {
-	margin: 20px;
+  margin: 20px;
 }
 
 /* board */
 tr > td:nth-child(1) {
-	width: 110px;
+  width: 110px;
 }
 
 /* releases */
 tr > td:nth-child(2) {
-	width: 140px;
+  width: 140px;
 }

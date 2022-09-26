@@ -13,115 +13,115 @@ const consts = await readConsts();
 
 TLSSocket.setMaxListeners(1000);
 
-let sort_by_hits = consts.keys;
-const key_hits = {};
+let sortByHits = consts.keys;
+const keyHits = {};
 
 const agent = new Agent({ maxSockets: 100, keepAlive: true });
 
+/**
+ * Returns URL to the build
+ * @param {string} board
+ * @param {string} code
+ * @param {string} key
+ * @return {string}
+ */
 function resolveURL(board, code, key) {
-	return (
-		'https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_' +
-		code +
-		'_' +
-		board +
-		'_recovery_stable-channel_mp' +
-		(key ? '-v' + key : '') +
-		'.bin.zip'
-	);
+  return `https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_${code}_${board}_recovery_stable-channel_mp${
+    key ? `-v${key}` : ''
+  }.bin.zip`;
 }
 
 await data.store;
 
-for (let board in consts.boards) {
-	const version_promises = [];
+for (const board in consts.boards) {
+  const versionPromises = [];
 
-	for (let release in consts.versions) {
-		const versions = consts.versions[release];
+  for (const release in consts.versions) {
+    const versions = consts.versions[release];
 
-		if (!(board in data.store)) {
-			data.store[board] = {
-				processed: {},
-				releases: {},
-			};
-		}
+    if (!(board in data.store)) {
+      data.store[board] = {
+        processed: {},
+        releases: {},
+      };
+    }
 
-		let sboard = data.store[board];
+    const sboard = data.store[board];
 
-		// run all versions concurrently
-		for (let code of versions) {
-			if (!sboard.processed[code]) {
-				sboard.processed[code] = [];
-			}
+    // run all versions concurrently
+    for (const code of versions) {
+      if (!sboard.processed[code]) {
+        sboard.processed[code] = [];
+      }
 
-			const key_promises = [];
+      const keyPromises = [];
 
-			for (let key of sort_by_hits) {
-				if (sboard.processed[code].includes(key)) continue;
+      for (const key of sortByHits) {
+        if (sboard.processed[code].includes(key)) continue;
 
-				const url = resolveURL(board, code, key);
+        const url = resolveURL(board, code, key);
 
-				key_promises.push(
-					(async () => {
-						try {
-							// console.time(url);
+        keyPromises.push(
+          (async () => {
+            try {
+              // console.time(url);
 
-							const res = await fetch(url, {
-								method: 'HEAD',
-								agent: agent,
-							});
+              const res = await fetch(url, {
+                method: 'HEAD',
+                agent,
+              });
 
-							// console.timeEnd(url);
+              // console.timeEnd(url);
 
-							if (res.ok) {
-								console.log('Found DL:', board, release, url);
+              if (res.ok) {
+                console.log('Found DL:', board, release, url);
 
-								key_hits[key] = (key_hits[key] || 0) + 1;
-								sboard.releases[release] = { key, code };
-								sort_by_hits = consts.keys.sort(
-									(key1, key2) => (key_hits[key2] || 1) - (key_hits[key1] || 1)
-								);
-								data.change();
-							} else {
-								if (res.status != 404) console.error('Encountered', res.status);
-							}
-						} catch (err) {
-							console.error(err);
+                keyHits[key] = (keyHits[key] || 0) + 1;
+                sboard.releases[release] = { key, code };
+                sortByHits = consts.keys.sort(
+                  (key1, key2) => (keyHits[key2] || 1) - (keyHits[key1] || 1)
+                );
+                data.save();
+              } else if (res.status != 404) {
+                console.error('Encountered', res.status);
+              }
+            } catch (err) {
+              console.error(err);
 
-							sboard.processed[code].push(key);
-							data.change();
+              sboard.processed[code].push(key);
+              data.save();
 
-							return;
-						}
+              return;
+            }
 
-						sboard.processed[code].push(key);
-						data.change();
-					})()
-				);
-			}
+            sboard.processed[code].push(key);
+            data.save();
+          })()
+        );
+      }
 
-			if (!key_promises.length) {
-				continue;
-			}
+      if (!keyPromises.length) {
+        continue;
+      }
 
-			version_promises.push(key_promises);
+      versionPromises.push(keyPromises);
 
-			if (version_promises.length > 20) {
-				const x = `run batch of ${
-					version_promises.length
-				} promises, in batches: ${version_promises.flat(2).length}`;
-				console.time(x);
-				console.log(version_promises);
-				await Promise.all(version_promises.flat(1));
-				version_promises.length = 0;
-				console.timeEnd(x);
-			}
-		}
-	}
+      if (versionPromises.length > 20) {
+        const x = `run batch of ${
+          versionPromises.length
+        } promises, in batches: ${versionPromises.flat(2).length}`;
+        console.time(x);
+        console.log(versionPromises);
+        await Promise.all(versionPromises.flat(1));
+        versionPromises.length = 0;
+        console.timeEnd(x);
+      }
+    }
+  }
 
-	await Promise.all(version_promises.flat(1));
+  await Promise.all(versionPromises.flat(1));
 }
 
-await data.save();
-await data.close();
+data.save();
 
 console.log('Sync complete');

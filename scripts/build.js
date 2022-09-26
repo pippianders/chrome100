@@ -11,30 +11,30 @@ const data = await openDataStore('bin/data.json');
 const cats = ['Board', 'Releases', 'Models'];
 const extend = [];
 
-extend.push(`|${cats.map(cat => ` ${cat} `).join('|')}|`);
+extend.push(`|${cats.map((cat) => ` ${cat} `).join('|')}|`);
 extend.push(`|${cats.map(() => ' ---- ').join('|')}|`);
 
-for (let board in data.store) {
-	const { releases } = data.store[board];
+for (const board in data.store) {
+  if (!(board in data.store)) continue;
 
-	const row = [];
+  const { releases } = data.store[board];
 
-	row.push(board);
+  const row = [];
 
-	const links = [];
+  row.push(board);
 
-	for (let [release] of Object.entries(releases)) {
-		links.push(`[${release}](/api/download?board=${board}&release=${release})`);
-	}
+  const links = [];
 
-	row.push(links.join(' '));
+  for (const [release] of Object.entries(releases)) {
+    links.push(`[${release}](/api/download?board=${board}&release=${release})`);
+  }
 
-	row.push(consts.boards[board].join(', '));
+  row.push(links.join(' '));
 
-	extend.push(`|${row.map(col => ` ${col} `).join('|')}|`);
+  row.push(consts.boards[board].join(', '));
+
+  extend.push(`|${row.map((col) => ` ${col} `).join('|')}|`);
 }
-
-data.close();
 
 const recoveryTable = extend.join('\n');
 
@@ -42,19 +42,19 @@ await rm('build', { force: true, recursive: true });
 await mkdir('build');
 
 await copy('public', 'build', {
-	dereference: true,
+  dereference: true,
 });
 
 const index = await readFile('build/index.html', 'utf-8');
 
 const markdownBody = marked.parse(
-	(await readFile('assets/instructions.md', 'utf8')).replace(
-		'RECOVERY_IMAGES',
-		recoveryTable
-	)
+  (await readFile('assets/instructions.md', 'utf8')).replace(
+    'RECOVERY_IMAGES',
+    recoveryTable
+  )
 );
 
 await writeFile(
-	'build/index.html',
-	index.replace(/<markdown-body\s*?\/>/g, markdownBody)
+  'build/index.html',
+  index.replace(/<markdown-body\s*?\/>/g, markdownBody)
 );

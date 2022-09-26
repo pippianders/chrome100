@@ -1,54 +1,48 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
+/**
+ * Carefully write JSON data.
+ */
 export default class DataStore {
-	constructor(file, store) {
-		this.file = file;
+  /**
+   *
+   * @param {string} file
+   * @param {object} store
+   */
+  constructor(file, store) {
+    this.file = file;
+    this.store = store;
+  }
+  /**
+   * Trigger an async save.
+   * @return {Promise<void>}
+   */
+  save() {
+    if (!this.saving) {
+      this.saving = setTimeout(async () => {
+        await writeFile(this.file, JSON.stringify(this.store));
+        this.saving = undefined;
+      }, 1000);
+    }
 
-		this.timeouts = new Set();
-		this.intervals = new Set();
-
-		this.setInterval(() => this.save(), 1000);
-
-		this.store = store;
-	}
-	change() {
-		if (this.closed) throw new Error('DataStore is closed.');
-		this.changed = true;
-	}
-	async save() {
-		if (this.closed) throw new Error('DataStore is closed.');
-		if (!this.changed) return;
-		await writeFile(this.file, JSON.stringify(this.store));
-		this.changed = false;
-	}
-	setTimeout(callback, time) {
-		if (this.closed) throw new Error('DataStore is closed.');
-		var res = setTimeout(callback, time);
-		this.timeouts.add(res);
-		return res;
-	}
-	setInterval(callback, time) {
-		if (this.closed) throw new Error('DataStore is closed.');
-		var res = setInterval(callback, time);
-		this.intervals.add(res);
-		return res;
-	}
-	close() {
-		this.closed = true;
-
-		for (let timeout of this.timeouts) clearTimeout(timeout);
-		for (let interval of this.intervals) clearInterval(interval);
-	}
+    return this.saving;
+  }
 }
 
+/**
+ * Asynchronously open a DataStore.
+ * @param {string} file
+ * @param {object} fallback
+ * @return {DataStore}
+ */
 export async function openDataStore(file, fallback = {}) {
-	let store = fallback;
+  let store = fallback;
 
-	try {
-		store = JSON.parse(await readFile(file));
-	} catch (err) {
-		if (err?.code !== 'ENOENT') throw err;
-	}
+  try {
+    store = JSON.parse(await readFile(file));
+  } catch (err) {
+    if (err?.code !== 'ENOENT') throw err;
+  }
 
-	return new DataStore(file, store);
+  return new DataStore(file, store);
 }
