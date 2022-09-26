@@ -23,6 +23,7 @@
 		22,
 		23,
 		25,
+		27,
 		30,
 		31
 	],
@@ -445,7 +446,8 @@
 			"Positivo Chromebook N2210",
 			"Positivo Chromebook N2212",
 			"Zyrex Chromebook M432-1/M432-128/Zyrex Chromebook 360-1",
-			"EVERCOSS Chromebook CB1/CB1A"
+			"EVERCOSS Chromebook CB1/CB1A",
+			"HP Chromebook 14a-na0"
 		],
 		"liara": [],
 		"rammus": [
@@ -530,7 +532,18 @@
 			"CTL Chromebook PX14E/PX14EX",
 			"CX1500FKA",
 			"Gateway Chromebook 14",
-			"Gateway Chromebook 15"
+			"Gateway Chromebook 15",
+			"ASUS Chromebook CX1",
+			"ASUS Chromebook CX1 CX1102",
+			"ASUS Chromebook Flip CX1 CX1102",
+			"Acer Chromebook 314",
+			"Acer Chromebook 511 (C734 , C734T, C733-R, C733T-R)",
+			"Acer Chromebook Spin 511 (R753T) & Acer Chromebook spin 511 (R753TN) & Acer Chromebook Spin 511(R752T-R)",
+			"CTL Chromebook PX14E/PX14EX/PX14EXT",
+			"HP Chromebook 14a-na1",
+			"HP Chromebook x360 14a-ca1",
+			"HP Chromebook15a-na0",
+			"Packard Bell Chromebook 314"
 		],
 		"drallion": [
 			"Dell Latitude 7410 Chromebook Enterprise"
@@ -554,7 +567,8 @@
 			"Acer Chromebook Spin 513, CP513-1H/1HL, R841T/LT",
 			"Dynabook Chromebook C1",
 			"Libera-Merdeka Chromebook C100/C110/C120/C150",
-			"Orbic Chromebook"
+			"Orbic Chromebook",
+			"HP Fortis 11 G9 Q Chromebook/Chromebook Enterprise"
 		],
 		"zork": [
 			"ASUS Chromebook Flip CM1",
@@ -596,7 +610,22 @@
 			"Lenovo Chromebook Duet 3 / IdeaPad Duet 3 Chromebook"
 		],
 		"brya": [
-			"HP Elite Dragonfly Chromebook"
+			"HP Elite Dragonfly Chromebook",
+			"Acer Chromebook Spin 714  -- CP714-1WN / Acer Chromebook Enterprise Spin 714 -- CP714-1WN",
+			"CONS & EDU - ASUS Chromebook Flip CX5; ENT - ASUS Chromebook Enterprise Flip CX5",
+			"Lenovo Flex 5i Chromebook 14” / IdeaPad Flex 5i Chromebook (14\", 7)",
+			"ThinkPad C14 Gen 1 Chromebook",
+			"w/o Chrome Enterprise Upgrade: HP Elite c640 14 inch G3 Chromebook; with Chrome Enterprise Upgrade: HP Elite c640 14 inch G3 Chromebook Enterprise"
+		],
+		"cherry": [
+			"ACER Chromebook spin 513"
+		],
+		"falco": [
+			"HP Chromebook 14"
+		],
+		"guybrush": [
+			"Acer Chromebook Spin 514 [CP514-3H, CP514-3HH, CP514-3WH]",
+			"HP Elite c645 G2 Chromebook"
 		]
 	},
 	"versions": {
@@ -768,6 +797,13 @@
 		],
 		"101": [
 			"14588.98.0"
+		],
+		"103": [
+			"14816.131.0"
+		],
+		"105": [
+			"14989.107.0",
+			"14989.85.0"
 		]
 	}
 }
