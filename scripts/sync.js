@@ -1,10 +1,9 @@
 import DataStore from '../DataStore.js';
 import { appData } from '../config/paths.js';
-
+import { readConsts } from '../consts.js';
 import fetch from 'node-fetch';
 import { Agent } from 'node:https';
 import { TLSSocket } from 'node:tls';
-import { readConsts } from '../consts.js';
 
 const data = new DataStore(appData);
 

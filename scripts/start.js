@@ -1,11 +1,10 @@
-import { Command, Option } from 'commander';
-
-const program = new Command();
-
 import DataStore from '../DataStore.js';
+import { appBuild, appData } from '../config/paths.js';
+import { Command, Option } from 'commander';
 import fastify from 'fastify';
 import fastifyStatic from 'fastify-static';
-import { appBuild, appData } from '../config/paths.js';
+
+const program = new Command();
 
 program
 	.addOption(

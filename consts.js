@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import { appConsts } from './config/paths.js';
+import { readFile, writeFile } from 'node:fs/promises';
 
 export async function readConsts() {
 	const buffer = await readFile(appConsts);

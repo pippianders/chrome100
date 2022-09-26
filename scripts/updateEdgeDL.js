@@ -1,5 +1,5 @@
-import fetch from 'node-fetch';
 import { readConsts, writeConsts } from '../consts.js';
+import fetch from 'node-fetch';
 
 const consts = await readConsts();
 

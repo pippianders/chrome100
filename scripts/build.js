@@ -1,14 +1,4 @@
 import DataStore from '../DataStore.js';
-
-import { readConsts } from '../consts.js';
-
-const consts = await readConsts();
-
-import webpack from 'webpack';
-import { marked } from 'marked';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import fs from 'fs-extra';
 import {
 	appBuild,
 	appData,
@@ -17,6 +7,14 @@ import {
 	appMd,
 	appPublic,
 } from '../config/paths.js';
+import { readConsts } from '../consts.js';
+import fs from 'fs-extra';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { marked } from 'marked';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import webpack from 'webpack';
+
+const consts = await readConsts();
 
 const data = new DataStore(appData);
 
