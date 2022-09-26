@@ -1,4 +1,4 @@
-import DataStore, { openDataStore } from '../DataStore.js';
+import { openDataStore } from '../DataStore.js';
 import { readConsts } from '../consts.js';
 import fetch from 'node-fetch';
 import { Agent } from 'node:https';
@@ -110,7 +110,7 @@ for (const board in consts.boards) {
           versionPromises.length
         } promises, in batches: ${versionPromises.flat(2).length}`;
         console.time(x);
-        console.log(versionPromises);
+        // console.log(versionPromises);
         await Promise.all(versionPromises.flat(1));
         versionPromises.length = 0;
         console.timeEnd(x);

@@ -20,7 +20,7 @@ export default class DataStore {
   save() {
     if (!this.saving) {
       this.saving = setTimeout(async () => {
-        await writeFile(this.file, JSON.stringify(this.store));
+        await writeFile(this.file, JSON.stringify(this.store, null, '\t'));
         this.saving = undefined;
       }, 1000);
     }
