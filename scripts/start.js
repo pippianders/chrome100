@@ -82,14 +82,20 @@ program
 
     server.register(fastifyStatic, { root: resolve('build') });
 
-    server.listen(port, host, (error, url) => {
-      if (error) {
-        console.error(error);
-        process.exit(1);
-      }
+    server.listen(
+      {
+        host,
+        port,
+      },
+      (error, url) => {
+        if (error) {
+          console.error(error);
+          process.exit(1);
+        }
 
-      console.log('Server listening. View live at', url);
-    });
+        console.log('Server listening. View live at', url);
+      }
+    );
   });
 
 program.parse(process.argv);
